@@ -38,9 +38,9 @@ android {
 flutter {
     source = "../.."
 }
-
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22")
+    implementation("androidx.multidex:multidex:2.0.1")
 }
+
