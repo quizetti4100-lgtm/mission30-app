@@ -10,13 +10,6 @@ buildscript {
         mavenCentral()
     }
  
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
- 
 // Build directory configuration
 rootProject.layout.buildDirectory.set(file("../build"))
  
