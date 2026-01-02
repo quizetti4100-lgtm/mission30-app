@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ContactUsScreen extends StatelessWidget {
-  const ContactUsScreen({super.key});
+  // एरर फिक्स: यहाँ से 'const' हटा दिया गया है ताकि डायनामिक थीम काम कर सके
+  ContactUsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,104 +13,102 @@ class ContactUsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Help & Support", style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 1. Top Decorative Image/Icon
+            // --- प्रीमियम हेडर सेक्शन ---
             Container(
-              height: 200,
+              height: 220,
               width: double.infinity,
-              color: primaryColor.withOpacity(0.1),
-              child: Icon(Icons.headset_mic, size: 100, color: primaryColor),
-            ),
-
-            const SizedBox(height: 30),
-            const Text("How can we help you?", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              child: Text(
-                "Our team is available 10 AM to 7 PM to assist you with your queries.",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+              decoration: BoxDecoration(
+                color: primaryColor.withOpacity(0.1),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.headset_mic, size: 50, color: primaryColor),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text("How can we help you?", 
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  const Text("We are available 10 AM - 7 PM", 
+                    style: TextStyle(color: Colors.grey, fontSize: 13)),
+                ],
               ),
             ),
 
             const SizedBox(height: 30),
 
-            // 2. Contact Options Cards
-            _contactCard(
-              context,
-              Icons.phone_in_talk,
-              "Call Us",
-              "+91 9199614867",
-              () {
-                // यहाँ कॉल करने का लॉजिक आएगा
-              },
-            ),
-            _contactCard(
-              context,
-              Icons.chat_bubble_outline,
-              "WhatsApp Support",
-              "9199614867",
-              () {
-                // यहाँ व्हाट्सएप ओपन करने का लॉजिक आएगा
-              },
-            ),
-            _contactCard(
-              context,
-              Icons.email_outlined,
-              "Email Us",
-              "mission30patna@gmail.com",
-              () {
-                // यहाँ ईमेल का लॉजिक आएगा
-              },
-            ),
+            // --- कांटेक्ट कार्ड्स ---
+            _buildContactCard(context, Icons.phone_in_talk, "Call Us", "+91 9876543210", Colors.blue),
+            _buildContactCard(context, Icons.chat_bubble_outline, "WhatsApp", "Chat with Support", Colors.green),
+            _buildContactCard(context, Icons.email_outlined, "Email Us", "support@vister.com", Colors.red),
 
             const SizedBox(height: 40),
-            const Text("Follow us on", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 15),
             
-            // 3. Social Icons
+            // --- सोशल मीडिया सेक्शन ---
+            const Text("Follow us for updates", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _socialIcon("https://cdn-icons-png.flaticon.com/512/1384/1384060.png"), // Youtube
-                _socialIcon("https://cdn-icons-png.flaticon.com/512/2111/2111463.png"), // Instagram
-                _socialIcon("https://cdn-icons-png.flaticon.com/512/733/733547.png"),   // Facebook
+                _socialIcon(Icons.facebook, Colors.blue),
+                const SizedBox(width: 20),
+                _socialIcon(Icons.camera_alt, Colors.pink),
+                const SizedBox(width: 20),
+                _socialIcon(Icons.play_arrow, Colors.red),
               ],
             ),
+
             const SizedBox(height: 50),
+            const Text("From", style: TextStyle(color: Colors.grey, fontSize: 10)),
+            const Text("VISTER TECHNOLOGIES", 
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, letterSpacing: 2)),
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
   }
 
-  Widget _contactCard(BuildContext context, IconData icon, String title, String subtitle, Function() onTap) {
+  Widget _buildContactCard(BuildContext context, IconData icon, String title, String sub, Color iconColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: InkWell(
-        onTap: onTap,
-        child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          elevation: 0,
-          color: Colors.grey[50],
-          child: ListTile(
-            leading: Icon(icon, color: Theme.of(context).primaryColor),
-            title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(subtitle),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.grey.shade100),
+        ),
+        child: ListTile(
+          leading: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+            child: Icon(icon, color: iconColor),
           ),
+          title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(sub),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey),
+          onTap: () {},
         ),
       ),
     );
   }
 
-  Widget _socialIcon(String url) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Image.network(url, height: 30, width: 30),
+  Widget _socialIcon(IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+      child: Icon(icon, color: color, size: 24),
     );
   }
 }

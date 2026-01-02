@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart'; // kIsWeb के लिए
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import 'dart:ui_web' as ui; // लेटेस्ट वेब सपोर्ट के लिए
-import 'package:universal_html/html.dart' as html; 
 
 class VideoPlayerScreen extends StatefulWidget {
   final String videoUrl;
@@ -23,43 +20,36 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    if (kIsWeb) {
-      // --- वेब के लिए IFRAME लॉजिक ---
-      final String viewID = 'bunny-video-${widget.videoUrl.hashCode}';
-      
-      // Iframe का लिंक तैयार करें
-      String embedUrl = widget.videoUrl;
-      if (embedUrl.contains('.b-cdn.net')) {
-         embedUrl = embedUrl.replaceAll('.b-cdn.net', '.mediadelivery.net/embed').replaceAll('/playlist.m3u8', '');
-      }
-      
-      // रजिस्टर व्यू फैक्ट्री
-      ui.platformViewRegistry.registerViewFactory(
-        viewID,
-        (int viewId) {
-          final element = html.IFrameElement()
-            ..src = embedUrl
-            ..style.border = 'none'
-            ..allowFullscreen = true
-            ..setAttribute("allow", "autoplay; fullscreen");
-          return element;
-        },
-      );
-    } else {
-      _initMobilePlayer();
-    }
+    _initPlayer();
   }
 
-  void _initMobilePlayer() async {
-    _videoController = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+  void _initPlayer() async {
+    // Bunny.net का HLS (.m3u8) लिंक Android पर बहुत स्मूथ चलता है
+    _videoController = VideoPlayerController.networkUrl(
+      Uri.parse(widget.videoUrl),
+    );
+
     try {
       await _videoController.initialize();
+      
       _chewieController = ChewieController(
         videoPlayerController: _videoController,
         autoPlay: true,
+        looping: false,
         aspectRatio: 16 / 9,
         allowPlaybackSpeedChanging: true,
+        showControls: true,
+        // एरर होने पर मैसेज दिखाएं
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.white),
+            ),
+          );
+        },
       );
+
       setState(() {
         _isInitialized = true;
       });
@@ -70,10 +60,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
-    if (!kIsWeb) {
-      _videoController.dispose();
-      _chewieController?.dispose();
-    }
+    _videoController.dispose();
+    _chewieController?.dispose();
     super.dispose();
   }
 
@@ -87,11 +75,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Center(
-        child: kIsWeb 
-          ? HtmlElementView(viewType: 'bunny-video-${widget.videoUrl.hashCode}') 
-          : (_isInitialized 
-              ? Chewie(controller: _chewieController!) 
-              : const CircularProgressIndicator(color: Colors.orange)),
+        child: _isInitialized && _chewieController != null
+            ? Chewie(controller: _chewieController!)
+            : const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: Colors.orange),
+                  SizedBox(height: 20),
+                  Text("Loading Video...", style: TextStyle(color: Colors.white)),
+                ],
+              ),
       ),
     );
   }

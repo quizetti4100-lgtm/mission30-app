@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "298347320838",
+    "project_id": "pw-saas-app",
+    "storage_bucket": "pw-saas-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298347320838:android:e98fbe0cc1298d8bd5d587",
+        "android_client_info": {
+          "package_name": "com.example.coaching_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPtgIlxwI7XcnmPMdR6zpgKqxQGVVwFng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
