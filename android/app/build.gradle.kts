@@ -1,9 +1,8 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("kotlin-android") // स्क्रीनशॉट के अनुसार सही किया गया
     id("dev.flutter.flutter-gradle-plugin")
-    // Firebase के लिए यह लाइन यहाँ होना ज़रूरी है
-    id("com.google.gms.google-services")
+    id("com.google.gms.google-services") // Firebase प्लगइन
 }
 
 android {
@@ -21,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.coaching_app"
-        minSdk = 21 // Firebase के लिए 21 ज़रूरी है
+        minSdk = 21 
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -29,7 +28,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            // यहाँ हमने डिबग की (key) सेट की है ताकि बिल्ड न रुके
+            // हमने यहाँ डिबग की (key) सेट की है ताकि बिल्ड न रुके
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             isShrinkResources = false
@@ -41,7 +40,7 @@ flutter {
     source = "../.."
 }
 
-// --- अब यहाँ सही जगह पर 'dependencies' है ---
+// --- यहाँ 'implementation' सही काम करेगा ---
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
