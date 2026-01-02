@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android") // स्क्रीनशॉट के अनुसार सही किया गया
+    id("kotlin-android")ा
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services") // Firebase प्लगइन
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -28,7 +28,6 @@ android {
 
     buildTypes {
         getByName("release") {
-            // हमने यहाँ डिबग की (key) सेट की है ताकि बिल्ड न रुके
             signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             isShrinkResources = false
@@ -39,8 +38,6 @@ android {
 flutter {
     source = "../.."
 }
-
-// --- यहाँ 'implementation' सही काम करेगा ---
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
