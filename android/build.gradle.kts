@@ -9,14 +9,6 @@ buildscript {
         google()
         mavenCentral()
     }
-    dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("io.flutter:flutter_embedding_release:1.0.0-3316dd7228")
-}
-}
  
 allprojects {
     repositories {
